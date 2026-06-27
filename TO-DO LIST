@@ -1,0 +1,176 @@
+import json
+import os
+
+FILE = "todo_data.json"
+
+
+def read_tasks():
+    if os.path.exists(FILE):
+        with open(FILE, "r") as f:
+            return json.load(f)
+    return []
+
+
+def write_tasks(tasks):
+    with open(FILE, "w") as f:
+        json.dump(tasks, f, indent=4)
+
+
+def display(tasks):
+    print("\n========== MY TASKS ==========")
+
+    if len(tasks) == 0:
+        print("No tasks available.")
+        return
+
+    for i, task in enumerate(tasks, start=1):
+        status = "Completed" if task["done"] else "Pending"
+        print(f"{i}. {task['title']} | Priority: {task['priority']} | {status}")
+
+
+def add(tasks):
+    title = input("Task Name : ")
+
+    print("\nPriority")
+    print("1. High")
+    print("2. Medium")
+    print("3. Low")
+
+    p = input("Choose Priority: ")
+
+    if p == "1":
+        priority = "High"
+    elif p == "2":
+        priority = "Medium"
+    else:
+        priority = "Low"
+
+    tasks.append({
+        "title": title,
+        "priority": priority,
+        "done": False
+    })
+
+    write_tasks(tasks)
+    print("Task Added Successfully!\n")
+
+
+def complete(tasks):
+    display(tasks)
+
+    if not tasks:
+        return
+
+    try:
+        n = int(input("Task Number: "))
+        tasks[n - 1]["done"] = True
+        write_tasks(tasks)
+        print("Task Completed.\n")
+    except:
+        print("Invalid Input.\n")
+
+
+def edit(tasks):
+    display(tasks)
+
+    if not tasks:
+        return
+
+    try:
+        n = int(input("Task Number to Edit: "))
+        new_name = input("Enter New Task Name: ")
+        tasks[n - 1]["title"] = new_name
+        write_tasks(tasks)
+        print("Task Updated.\n")
+    except:
+        print("Invalid Input.\n")
+
+
+def remove(tasks):
+    display(tasks)
+
+    if not tasks:
+        return
+
+    try:
+        n = int(input("Task Number to Delete: "))
+        deleted = tasks.pop(n - 1)
+        write_tasks(tasks)
+        print(f"{deleted['title']} Removed.\n")
+    except:
+        print("Invalid Input.\n")
+
+
+def search(tasks):
+    word = input("Search Task: ").lower()
+
+    found = False
+
+    for task in tasks:
+        if word in task["title"].lower():
+            status = "Completed" if task["done"] else "Pending"
+            print(f"{task['title']} | {task['priority']} | {status}")
+            found = True
+
+    if not found:
+        print("No Matching Task Found.\n")
+
+
+def report(tasks):
+    total = len(tasks)
+    done = 0
+
+    for task in tasks:
+        if task["done"]:
+            done += 1
+
+    print("\n========== REPORT ==========")
+    print("Total Tasks :", total)
+    print("Completed  :", done)
+    print("Pending    :", total - done)
+    print()
+
+
+tasks = read_tasks()
+
+while True:
+
+    print("\n========== TO-DO MANAGER ==========")
+    print("1. View Tasks")
+    print("2. Add Task")
+    print("3. Complete Task")
+    print("4. Edit Task")
+    print("5. Delete Task")
+    print("6. Search Task")
+    print("7. Task Report")
+    print("8. Exit")
+
+    choice = input("Enter Choice: ")
+
+    if choice == "1":
+        display(tasks)
+
+    elif choice == "2":
+        add(tasks)
+
+    elif choice == "3":
+        complete(tasks)
+
+    elif choice == "4":
+        edit(tasks)
+
+    elif choice == "5":
+        remove(tasks)
+
+    elif choice == "6":
+        search(tasks)
+
+    elif choice == "7":
+        report(tasks)
+
+    elif choice == "8":
+        print("\nThank You for Using My To-Do Manager.")
+        break
+
+    else:
+        print("Please Enter a Valid Choice.")
