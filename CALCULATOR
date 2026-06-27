@@ -1,0 +1,58 @@
+print("=" * 40)
+print("      MY SMART CALCULATOR")
+print("=" * 40)
+
+while True:
+
+    try:
+        first = float(input("\nEnter First Number : "))
+        second = float(input("Enter Second Number: "))
+    except ValueError:
+        print("Please enter valid numbers.")
+        continue
+
+    print("\nAvailable Operations")
+    print("+  Addition")
+    print("-  Subtraction")
+    print("*  Multiplication")
+    print("/  Division")
+    print("%  Modulus")
+    print("** Power")
+
+    operator = input("\nChoose an operator: ")
+
+    if operator == "+":
+        answer = first + second
+
+    elif operator == "-":
+        answer = first - second
+
+    elif operator == "*":
+        answer = first * second
+
+    elif operator == "/":
+        if second == 0:
+            print("Division by zero is not possible.")
+            continue
+        answer = first / second
+
+    elif operator == "%":
+        if second == 0:
+            print("Cannot find remainder with zero.")
+            continue
+        answer = first % second
+
+    elif operator == "**":
+        answer = first ** second
+
+    else:
+        print("Invalid operator selected.")
+        continue
+
+    print(f"\nResult : {first} {operator} {second} = {answer}")
+
+    again = input("\nDo you want another calculation? (yes/no): ").lower()
+
+    if again != "yes":
+        print("\nThank you for using My Smart Calculator!")
+        break
